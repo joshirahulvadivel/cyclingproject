@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>cycling boy</title>
+  <!-- Add Bootstrap CSS link -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Add custom CSS -->
+  <style>
+    #cycleImage {
+      max-width: 100%;
+    }
+
+    #cycleVideo {
+      display: none;
+    }
+
+    #energyContainer {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #00f195;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-4">
+    <h1>cycling boy</h1>
+    <button id="playBtn" class="btn btn-primary">Pedaling</button>
+    <button id="stopBtn" class="btn btn-danger">Hold</button>
+    <br>
+    <!-- Add the image and video elements -->
+    <img id="cycleImage" src="cyclenotmoving.jpg" alt="Cycle not moving">
+    <video id="cycleVideo" width="645" height="480" loop>
+      <source src="cyclemoving.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+
+  <!-- Container to calculate energy -->
+  <div class="container" id="energyContainer">
+    <h3>calories burning</h3>
+    <div id="energyPercentage">0%</div>
+  </div>
+
+  <!-- Add Bootstrap JS and jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    var energy = 0;
+    var increaseEnergyInterval;
+
+    function increaseEnergy() {
+      energy += 1;
+      updateEnergyDisplay();
+    }
+
+    function decreaseEnergy() {
+      energy -= 1;
+      if (energy < 0) {
+        energy = 0;
+        clearInterval(decreaseEnergyInterval);
+      }
+      updateEnergyDisplay();
+    }
+
+    function updateEnergyDisplay() {
+      $("#energyPercentage").text(energy + "%");
+    }
+
+    $(document).ready(function() {
+      // Function to play the video and hide the image
+      $("#playBtn").on("click", function() {
+        $("#cycleVideo").show();
+        $("#cycleImage").hide();
+        $("#cycleVideo")[0].play();
+
+        // Start increasing energy every second
+        increaseEnergyInterval = setInterval(increaseEnergy, 1000);
+      });
+
+      // Function to stop the video and show the image
+      $("#stopBtn").on("click", function() {
+        $("#cycleVideo")[0].pause();
+        $("#cycleVideo").hide();
+        $("#cycleImage").show();
+
+        // Stop increasing energy and start decreasing
+        clearInterval(increaseEnergyInterval);
+        holdEnergyInterval = setInterval(holdEnergy, 1000);
+      });
+    });
+  </script>
+</body>
+</html>
